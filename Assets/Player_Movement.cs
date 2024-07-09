@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Player_Movement : MonoBehaviour
 {
-    public float moveSpeed = 10f; // Velocidad de movimiento del jugador (no usada en este script)
-    public float jumpForce = 10f; // Fuerza del salto cuando el jugador se mueve a otra pared
+    public float jumpForce = 10f; // Fuerza del salto
+    public float jumpDuration = 0.5f; // Duración del salto
     private int currentWall = 0; // 0 = piso, 1 = pared izquierda, 2 = techo, 3 = pared derecha
     private Rigidbody rb; // Referencia al componente Rigidbody del jugador
+    private bool isJumping = false; // Para evitar que el jugador salte mientras está en el aire
 
     void Start()
     {
@@ -16,54 +17,70 @@ public class Player_Movement : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A)) // Si se presiona la tecla A
+        if (Input.GetKeyDown(KeyCode.A) && !isJumping) // Si se presiona la tecla A y el jugador no está en el aire
         {
-            MoveToNextWall(-1); // Mueve al jugador a la pared de la izquierda
+            StartCoroutine(MoveToNextWall(-1)); // Mueve al jugador a la pared de la izquierda
         }
-        if (Input.GetKeyDown(KeyCode.D)) // Si se presiona la tecla D
+        if (Input.GetKeyDown(KeyCode.D) && !isJumping) // Si se presiona la tecla D y el jugador no está en el aire
         {
-            MoveToNextWall(1); // Mueve al jugador a la pared de la derecha
+            StartCoroutine(MoveToNextWall(1)); // Mueve al jugador a la pared de la derecha
         }
     }
 
-    void MoveToNextWall(int direction)
+    IEnumerator MoveToNextWall(int direction)
     {
-        currentWall = (currentWall + direction + 4) % 4; // Calcula la nueva pared en la que se ubicará el jugador
+        isJumping = true; // Indica que el jugador está en el aire
 
-        // Variables para almacenar la nueva rotación, desplazamiento de posición y dirección de la gravedad
-        Vector3 newRotation = Vector3.zero;
-        Vector3 newPositionOffset = Vector3.zero;
+        int newWall = (currentWall + direction + 4) % 4; // Calcula la nueva pared en la que se ubicará el jugador
+
+        // Variables para almacenar la nueva rotación y dirección de la gravedad
+        Vector3 startRotation = transform.eulerAngles;
+        Vector3 endRotation = Vector3.zero;
+        Vector3 jumpDirection = Vector3.up;
         Vector3 newGravityDirection = Vector3.down;
 
-        // Ajusta las variables según la pared actual
-        switch (currentWall)
+        // Ajusta las variables según la nueva pared
+        switch (newWall)
         {
             case 0: // piso
-                newRotation = new Vector3(0, 0, 0); // Sin rotación
+                endRotation = new Vector3(0, 0, 0); // Sin rotación
                 newGravityDirection = Vector3.down; // Gravedad hacia abajo
-                newPositionOffset = new Vector3(0, -transform.position.y, 0); // Ajuste de posición
                 break;
             case 1: // pared izquierda
-                newRotation = new Vector3(0, 0, 90); // Rotación de 90 grados
-                newGravityDirection = Vector3.right; // Gravedad hacia la izquierda
-                newPositionOffset = new Vector3(-transform.position.y, 0, 0); // Ajuste de posición
+                endRotation = new Vector3(0, 0, 90); // Rotación de 90 grados
+                newGravityDirection = Vector3.right; // Gravedad hacia la derecha
                 break;
             case 2: // techo
-                newRotation = new Vector3(0, 0, 180); // Rotación de 180 grados
+                endRotation = new Vector3(0, 0, 180); // Rotación de 180 grados
                 newGravityDirection = Vector3.up; // Gravedad hacia arriba
-                newPositionOffset = new Vector3(0, -transform.position.y, 0); // Ajuste de posición
                 break;
             case 3: // pared derecha
-                newRotation = new Vector3(0, 0, -90); // Rotación de -90 grados
-                newGravityDirection = Vector3.left; // Gravedad hacia la derecha
-                newPositionOffset = new Vector3(transform.position.y, 0, 0); // Ajuste de posición
+                endRotation = new Vector3(0, 0, -90); // Rotación de -90 grados
+                newGravityDirection = Vector3.left; // Gravedad hacia la izquierda
                 break;
         }
 
-        transform.rotation = Quaternion.Euler(newRotation); // Aplica la nueva rotación al jugador
-        transform.position += newPositionOffset; // Aplica el ajuste de posición al jugador
-        Physics.gravity = newGravityDirection * 9.81f; // Cambia la dirección de la gravedad
+        // Fase 1: Salto hacia arriba
         rb.velocity = Vector3.zero; // Detiene cualquier movimiento actual del jugador
-        rb.AddForce(-newGravityDirection * jumpForce, ForceMode.Impulse); // Aplica una fuerza en la dirección opuesta de la gravedad para simular el salto a la nueva pared
+        rb.AddForce(jumpDirection * jumpForce, ForceMode.Impulse);
+
+        // Espera la duración del salto antes de cambiar la gravedad
+        yield return new WaitForSeconds(jumpDuration / 2);
+
+        // Fase 2: Rota al jugador en el aire
+        float elapsedTime = 0f;
+        while (elapsedTime < jumpDuration / 2)
+        {
+            transform.eulerAngles = Vector3.Lerp(startRotation, endRotation, elapsedTime / (jumpDuration / 2));
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Fase 3: Ajusta la gravedad y aplica la caída
+        transform.eulerAngles = endRotation; // Asegura que la rotación final sea exacta
+        Physics.gravity = newGravityDirection * 9.81f; // Cambia la dirección de la gravedad
+
+        currentWall = newWall; // Actualiza la pared actual
+        isJumping = false; // Indica que el jugador ha aterrizado
     }
 }
