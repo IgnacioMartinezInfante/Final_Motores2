@@ -6,7 +6,7 @@ public class Player_Movement : MonoBehaviour
 {
     public Animator animator; // Referencia al componente Animator del jugador
     public float gravityStrength = 9.81f; // La fuerza de la gravedad
-    private int currentWall = 0; // 0 = piso, 1 = pared izquierda, 2 = techo, 3 = pared derecha
+    private int currentWall = 0; // 0 = piso, 1 = pared derecha, 2 = techo, 3 = pared izquierda
     private Rigidbody rb; // Referencia al componente Rigidbody del jugador
     private bool isJumping = false; // Para evitar que el jugador salte mientras está en el aire
 
@@ -44,8 +44,8 @@ public class Player_Movement : MonoBehaviour
             animator.SetTrigger("JumpRightTrigger"); // Activa la animación de salto a la derecha
         }
 
-        // Espera la duración de la animación (ajusta según sea necesario)
-        yield return new WaitForSeconds(1f);
+        // Espera la duración de la animación de salto
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
 
         // Ajusta la gravedad según la nueva pared
         switch (newWall)
@@ -53,19 +53,18 @@ public class Player_Movement : MonoBehaviour
             case 0: // piso
                 Physics.gravity = Vector3.down * gravityStrength;
                 break;
-            case 1: // pared izquierda
-                Physics.gravity = Vector3.right * gravityStrength;
+            case 1: // pared derecha
+                Physics.gravity = Vector3.left * gravityStrength;
                 break;
             case 2: // techo
                 Physics.gravity = Vector3.up * gravityStrength;
                 break;
-            case 3: // pared derecha
-                Physics.gravity = Vector3.left * gravityStrength;
+            case 3: // pared izquierda
+                Physics.gravity = Vector3.right * gravityStrength;
                 break;
         }
 
         currentWall = newWall; // Actualiza la pared actual
-        Debug.Log("Pared " + currentWall);
         animator.SetInteger("Wall", currentWall); // Actualiza el parámetro del Animator
         isJumping = false; // Indica que el jugador ha aterrizado
     }
