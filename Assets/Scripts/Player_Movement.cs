@@ -84,13 +84,13 @@ public class Player_Movement : MonoBehaviour
                 Physics.gravity = Vector3.down * gravityStrength;
                 break;
             case 1: // pared derecha
-                Physics.gravity = Vector3.left * gravityStrength;
+                Physics.gravity = Vector3.right * gravityStrength;
                 break;
             case 2: // techo
                 Physics.gravity = Vector3.up * gravityStrength;
                 break;
             case 3: // pared izquierda
-                Physics.gravity = Vector3.right * gravityStrength;
+                Physics.gravity = Vector3.left * gravityStrength;
                 break;
         }
 
