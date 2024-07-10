@@ -20,10 +20,12 @@ public class Player_Movement : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A) && !isJumping) // Si se presiona la tecla A y el jugador no está en el aire
         {
+            animator.SetBool("JumpRight", false); // Establece JumpRight en false para saltar a la izquierda
             StartCoroutine(PerformJump(-1)); // Ejecuta la animación de salto a la izquierda
         }
         if (Input.GetKeyDown(KeyCode.D) && !isJumping) // Si se presiona la tecla D y el jugador no está en el aire
         {
+            animator.SetBool("JumpRight", true); // Establece JumpRight en true para saltar a la derecha
             StartCoroutine(PerformJump(1)); // Ejecuta la animación de salto a la derecha
         }
     }
