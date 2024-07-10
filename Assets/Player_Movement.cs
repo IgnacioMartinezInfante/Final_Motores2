@@ -37,11 +37,39 @@ public class Player_Movement : MonoBehaviour
         // Determina cuál animación de salto activar
         if (direction == -1)
         {
-            animator.SetTrigger("JumpLeftTrigger"); // Activa la animación de salto a la izquierda
+            switch (currentWall)
+            {
+                case 0:
+                    animator.SetTrigger("JumpLeftToRightWallTrigger");
+                    break;
+                case 1:
+                    animator.SetTrigger("JumpLeftToCeilingTrigger");
+                    break;
+                case 2:
+                    animator.SetTrigger("JumpLeftToFloorTrigger");
+                    break;
+                case 3:
+                    animator.SetTrigger("JumpLeftToLeftWallTrigger");
+                    break;
+            }
         }
         else if (direction == 1)
         {
-            animator.SetTrigger("JumpRightTrigger"); // Activa la animación de salto a la derecha
+            switch (currentWall)
+            {
+                case 0:
+                    animator.SetTrigger("JumpRightToRightWallTrigger");
+                    break;
+                case 1:
+                    animator.SetTrigger("JumpRightToCeilingTrigger");
+                    break;
+                case 2:
+                    animator.SetTrigger("JumpRightToFloorTrigger");
+                    break;
+                case 3:
+                    animator.SetTrigger("JumpRightToLeftWallTrigger");
+                    break;
+            }
         }
 
         // Espera la duración de la animación de salto
