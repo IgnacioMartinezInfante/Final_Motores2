@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class BouncingBall : MonoBehaviour
 {
     public float bounciness = 0.8f; // Coeficiente de restitución
+    public TMP_Text buttonCounterText; // Asignar desde el Inspector
 
     private Rigidbody rb;
+    private int buttonPressCount = 0;
 
     void Start()
     {
@@ -21,6 +24,28 @@ public class BouncingBall : MonoBehaviour
         if (collider != null)
         {
             collider.material = physicMaterial;
+        }
+
+        if (buttonCounterText == null)
+        {
+            Debug.LogError("No se ha asignado un objeto TMP_Text desde el Inspector.");
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Button"))
+        {
+            buttonPressCount++;
+            UpdateButtonCounterText();
+        }
+    }
+
+    private void UpdateButtonCounterText()
+    {
+        if (buttonCounterText != null)
+        {
+            buttonCounterText.text = "Botones: " + buttonPressCount.ToString();
         }
     }
 }
