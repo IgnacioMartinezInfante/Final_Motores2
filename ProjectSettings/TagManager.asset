@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ground
   - ballfriend
+  - Button
   layers:
   - Default
   - TransparentFX
