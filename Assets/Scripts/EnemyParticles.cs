@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyParticles : MonoBehaviour
 {
     public List<ParticleSystem> particleSystems; // Lista de sistemas de partículas a activar
+    public GameObject objectToDestroy; // Objeto a destruir
 
     void Start()
     {
@@ -20,8 +21,9 @@ public class EnemyParticles : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.name == "ballfriend") // Compara el nombre del objeto con "ballfriend"
+        if (collision.gameObject.CompareTag("ballfriend")) // Compara el nombre del objeto con "ballfriend"
         {
+            Debug.Log("colision");
             // Activa y reproduce todos los sistemas de partículas si están asignados
             foreach (ParticleSystem ps in particleSystems)
             {
@@ -32,7 +34,7 @@ public class EnemyParticles : MonoBehaviour
                 }
             }
 
-            Destroy(gameObject); // Destruye el objeto
+            Destroy(objectToDestroy); // Destruye el objeto especificado
         }
     }
 }
