@@ -16,9 +16,11 @@ public class BouncingBall : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         // Asegúrate de que la esfera tenga un material físico
-        PhysicMaterial physicMaterial = new PhysicMaterial();
-        physicMaterial.bounciness = bounciness;
-        physicMaterial.bounceCombine = PhysicMaterialCombine.Maximum;
+        PhysicMaterial physicMaterial = new PhysicMaterial
+        {
+            bounciness = bounciness,
+            bounceCombine = PhysicMaterialCombine.Maximum
+        };
 
         Collider collider = GetComponent<Collider>();
         if (collider != null)
@@ -36,6 +38,17 @@ public class BouncingBall : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Button"))
         {
+            Debug.Log("colision");
+            ButtonMovement buttonMovement = collision.gameObject.GetComponent<ButtonMovement>();
+            if (buttonMovement != null)
+            {
+                buttonMovement.StartAnimation();
+            }
+            else
+            {
+                Debug.LogError("El objeto con el que se colisionó no tiene un componente ButtonMovement.");
+            }
+
             buttonPressCount++;
             UpdateButtonCounterText();
         }

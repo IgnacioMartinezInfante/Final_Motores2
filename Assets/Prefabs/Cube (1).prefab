@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 4490054953500862412}
   - component: {fileID: 371374739267396821}
   - component: {fileID: -6940876467269063858}
+  - component: {fileID: 6338715895269776798}
+  - component: {fileID: -4676107569082350207}
   m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Button
@@ -119,3 +121,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonCounterText: {fileID: 0}
+--- !u!95 &6338715895269776798
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2557244291296895939}
+  m_Enabled: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d6677f890acf744498924278101d15ab, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-4676107569082350207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2557244291296895939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 800f9baf26ff0684da71f2077d5f53ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveDirection: {x: 0, y: -1, z: 0}
+  moveDistance: 1
+  rotateAngle: 90
+  duration: 1
