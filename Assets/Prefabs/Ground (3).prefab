@@ -675,7 +675,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -4676107569082350207, guid: e7ddc28af037ade49bd976fdfae51ff5, type: 3}
       propertyPath: buttonOrientation
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1693038359788718183, guid: e7ddc28af037ade49bd976fdfae51ff5, type: 3}
       propertyPath: m_LocalPosition.x
