@@ -18,6 +18,13 @@ public class ButtonMovement : MonoBehaviour
     private float elapsedTime = 0f;
     private bool isAnimating = false;
 
+    private AudioSource audioSource; // Referencia al AudioSource
+
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>(); // Obtener el AudioSource
+    }
+
     void Update()
     {
         if (isAnimating)
@@ -42,6 +49,10 @@ public class ButtonMovement : MonoBehaviour
         targetRotation = GetTargetRotation();
         elapsedTime = 0f;
         isAnimating = true;
+        if (audioSource != null)
+        {
+            audioSource.Play(); // Activar el AudioSource
+        }
     }
 
     private Vector3 GetMoveDirection()
